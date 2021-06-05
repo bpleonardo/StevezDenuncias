@@ -1,0 +1,73 @@
+from main import Bot
+
+import discord
+from discord.ext import commands
+from discord.raw_models import RawReactionActionEvent
+
+import config
+
+
+class ReactionManager(commands.Cog):
+    def __init__(self, bot: Bot):
+        self.bot = bot
+
+    @commands.Cog.listener(name='on_raw_reaction_add')
+    async def open_ticket(self, payload: RawReactionActionEvent):
+        """Abrir ticket."""
+        if payload.message_id != config.MESSAGE_ID or payload.member.bot:
+            return
+
+        if payload.emoji.name != config.OPEN_REACTION:
+            return
+
+        await self.bot.http.remove_reaction(
+            payload.channel_id,
+            payload.message_id,
+            payload.emoji,
+            payload.user_id,
+        )
+
+        category = self.bot.tickets_category
+
+        channel_name = f'denuncia-{str(payload.user_id >> 22)}'
+
+        if discord.utils.get(category.text_channels, name=channel_name):
+            return
+
+        perms_allowed = discord.PermissionOverwrite(
+            send_messages=True, view_channel=True
+        )
+
+        overwrites = {role: perms_allowed for role in self.bot.support_roles}
+        overwrites[payload.member] = perms_allowed
+        overwrites[self.bot.guild.default_role] = discord.PermissionOverwrite(
+            view_channel=False
+        )
+
+        channel = await category.create_text_channel(
+            channel_name, overwrites=overwrites
+        )
+
+        embed = discord.Embed(title='Faça sua denúncia aqui', color=0xFF2E17)
+        embed.description = 'Exemplo: \n> 315599918075215872 (ale#0004) estourando áudio na call.'
+        embed.set_footer(text='Clique em "🔒" para fechar o ticket.')
+
+        msg = await channel.send(content=payload.member.mention, embed=embed)
+        await msg.add_reaction(config.CLOSE_REACTION)
+
+    def is_first_message(self, message_id, channel_id):
+        # 1s é o tempo limite entre a criação do canal e a mensagem
+        return (message_id >> 22) - (channel_id >> 22) < 1000
+
+    @commands.Cog.listener('on_raw_reaction_add')
+    async def close_ticket(self, payload: RawReactionActionEvent):
+        """Fechar ticket."""
+        if payload.member.bot or payload.emoji.name != config.CLOSE_REACTION:
+            return
+
+        if self.is_first_message(payload.message_id, payload.channel_id):
+            await self.bot.http.delete_channel(payload.channel_id)
+
+
+def setup(bot):
+    bot.add_cog(ReactionManager(bot))
