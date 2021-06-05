@@ -1,18 +1,15 @@
-from main import Bot
-
 import discord
 from discord.ext import commands
-from discord.raw_models import RawReactionActionEvent
 
 import config
 
 
 class ReactionManager(commands.Cog):
-    def __init__(self, bot: Bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener(name='on_raw_reaction_add')
-    async def open_ticket(self, payload: RawReactionActionEvent):
+    async def open_ticket(self, payload):
         """Abrir ticket."""
         if payload.message_id != config.MESSAGE_ID or payload.member.bot:
             return
@@ -60,7 +57,7 @@ class ReactionManager(commands.Cog):
         return (message_id >> 22) - (channel_id >> 22) < 1000
 
     @commands.Cog.listener('on_raw_reaction_add')
-    async def close_ticket(self, payload: RawReactionActionEvent):
+    async def close_ticket(self, payload):
         """Fechar ticket."""
         if payload.member.bot or payload.emoji.name != config.CLOSE_REACTION:
             return

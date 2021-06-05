@@ -1,14 +1,12 @@
 import asyncio
-from main import Bot
 
-import discord
 from discord.ext import commands
 
 import config
 
 
 class MessagesManager(commands.Cog):
-    def __init__(self, bot: Bot):
+    def __init__(self, bot):
         self.bot = bot
         self.unclaimed_channels = []
 
@@ -35,7 +33,7 @@ class MessagesManager(commands.Cog):
                 break
 
     @commands.Cog.listener()
-    async def on_guild_channel_create(self, channel: discord.TextChannel):
+    async def on_guild_channel_create(self, channel):
         """Inicia um timeout."""
         if channel.category_id == config.CATEGORY_ID:
             self.bot.loop.create_task(self.watch_messages(channel))
