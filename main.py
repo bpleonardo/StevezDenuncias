@@ -10,7 +10,7 @@ import config
 
 load_dotenv()
 
-intents = Intents(reactions=True, members=True, guilds=True)
+intents = Intents(reactions=True, members=True, guilds=True, messages=True)
 
 
 class Bot(commands.Bot):
@@ -45,7 +45,7 @@ class Bot(commands.Bot):
         print(f'Logado como: {bot.user}')
 
 
-bot = Bot(command_prefix='d!', owner_ids=config.OWNER_IDS)
+bot = Bot(command_prefix='d!', intents=intents, owner_ids=config.OWNER_IDS)
 
 extensions = glob('cogs/*.py')
 extensions = [ext.replace('/', '.')[:-3] for ext in extensions]

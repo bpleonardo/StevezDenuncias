@@ -37,7 +37,7 @@ class ReactionManager(commands.Cog):
 
         overwrites = {role: perms_allowed for role in self.bot.support_roles}
         overwrites[payload.member] = perms_allowed
-        overwrites[self.bot.guild.me] = perms_allowed
+        # overwrites[self.bot.guild.me] = perms_allowed
         overwrites[self.bot.guild.default_role] = discord.PermissionOverwrite(
             view_channel=False
         )
