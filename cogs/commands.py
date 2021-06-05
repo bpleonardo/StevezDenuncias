@@ -20,6 +20,7 @@ class Commands(commands.Cog):
         overwrites[ctx.author] = discord.PermissionOverwrite(
             send_messages=True
         )
+        overwrites[ctx.me] = discord.PermissionOverwrite(send_messages=True)
         for role in self.bot.support_roles:
             overwrites[role] = discord.PermissionOverwrite(
                 send_messages=False, view_channel=True

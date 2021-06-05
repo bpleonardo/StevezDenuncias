@@ -11,17 +11,16 @@ class MessagesManager(commands.Cog):
         self.unclaimed_channels = []
 
     async def wait_for_message(self, channel):
-        check = lambda c: c == channel
+        check = lambda m: m.channel == channel and not m.author.bot
         try:
             await self.bot.wait_for('message', check=check, timeout=60)
         except asyncio.TimeoutError:
             await channel.delete()
-            self.unclaimed_channels.remove(channel.id)
             return False
         return True
 
     async def wait_for_claim(self, channel):
-        check = lambda c: c == channel
+        check = lambda m: m.channel == channel
         while channel.id in self.unclaimed_channels:
             try:
                 # "Atualizar" a cada 15 segundos
