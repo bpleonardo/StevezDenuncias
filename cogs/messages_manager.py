@@ -37,8 +37,8 @@ class MessagesManager(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel):
         """Inicia um timeout."""
-        if channel.category_id == config.CATEGORY_ID:
-            self.bot.loop.create_task(self.watch_messages(channel))
+        if channel.category_id != config.CATEGORY_ID:
+            return
 
         self.unclaimed_channels.append(channel.id)
 
