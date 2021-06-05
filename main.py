@@ -45,7 +45,7 @@ class Bot(commands.Bot):
         print(f'Logado como: {bot.user}')
 
 
-bot = Bot(command_prefix='d!')
+bot = Bot(command_prefix='d!', owner_ids=config.OWNER_IDS)
 
 extensions = glob('cogs/*.py')
 extensions = [ext.replace('/', '.')[:-3] for ext in extensions]
