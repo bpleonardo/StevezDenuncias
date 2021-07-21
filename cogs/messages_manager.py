@@ -8,6 +8,7 @@ import config
 class MessagesManager(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.unclaimed_channels = []
 
     async def wait_for_message(self, channel):
         check = lambda m: m.channel == channel and not m.author.bot
@@ -18,15 +19,33 @@ class MessagesManager(commands.Cog):
             return False
         return True
 
+    async def wait_for_claim(self, channel):
+        check = lambda m: m.channel == channel
+        while channel.id in self.unclaimed_channels:
+            try:
+                # "Atualizar" a cada 15 segundos
+                m = await self.bot.wait_for('message', check=check, timeout=15)
+            except asyncio.TimeoutError:
+                continue
+
+            for role in m.author.roles:
+                if role.id in config.SUPPORT_ROLES:
+                    ctx = await self.bot.get_context(m)
+                    return await self.bot.get_cog('Commands').claim(ctx)
+
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel):
         """Inicia um timeout."""
         if channel.category_id != config.CATEGORY_ID:
             return
 
+        self.unclaimed_channels.append(channel.id)
+
         res = await self.wait_for_message(channel)
         if not res:
             return
+
+        await self.wait_for_claim(channel)
 
 
 def setup(bot):
