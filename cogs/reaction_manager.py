@@ -48,7 +48,7 @@ class ReactionManager(commands.Cog):
 
         embed = discord.Embed(title='Faça sua denúncia aqui', color=0xFF2E17)
         embed.description = 'Exemplo: \n> 315599918075215872 (ale#0004) estourando áudio na call.'
-        embed.set_footer(text='Clique em "🔒" para fechar o ticket.')
+        embed.set_footer(text='Ao clicar em "🔒" e fechar o ticket, a staff NÃO poderá mais o ver.')
 
         msg = await channel.send(content=payload.member.mention, embed=embed)
         await msg.add_reaction(config.CLOSE_REACTION)
