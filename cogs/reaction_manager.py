@@ -46,7 +46,7 @@ class ReactionManager(commands.Cog):
             channel_name, overwrites=overwrites
         )
 
-        embed = discord.Embed(title='Faça sua denúncia aqui', color=0xFF2E17)
+        embed = discord.Embed(title='Faça sua denúncia aqui', color=0xe61b1b)
         embed.description = 'Exemplo: \n> 315599918075215872 (ale#0004) estourando áudio na call.'
         embed.set_footer(text='Ao clicar em "🔒" e fechar o ticket, a staff NÃO poderá mais o ver.')
 
