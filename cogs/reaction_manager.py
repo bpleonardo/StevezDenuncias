@@ -47,7 +47,7 @@ class ReactionManager(commands.Cog):
         )
 
         embed = discord.Embed(title='Faça sua denúncia aqui', color=0xFF2E17)
-        embed.description = '**• Para abrir uma denúncia você precisa:**\n > Do ID do infrator (Como copiar ID em <#821440633893683277>);\n> De um motivo plausível;\n> De provas e/ou testemunhas'
+        embed.description = '**• Para abrir uma denúncia você precisa:**\n > Do ID do infrator (Como copiar ID em <#936691125526351922>);\n> De um motivo plausível;\n> De provas e/ou testemunhas'
         embed.set_footer(text='Ao clicar em "🔒" e fechar o ticket, a staff NÃO poderá mais o ver.')
 
         msg = await channel.send(content=payload.member.mention, embed=embed)
