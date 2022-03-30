@@ -51,7 +51,7 @@ class ReactionManager(commands.Cog):
         embed.set_footer(text='Ao clicar em "🔒" e fechar o ticket, a staff NÃO poderá mais o ver.')
 
         msg = await channel.send(content=payload.member.mention, embed=embed)
-        await channel.send("<@IDMOD>")
+        await channel.send("<@&745026039935139950")
         await msg.add_reaction(config.CLOSE_REACTION)
 
     def is_first_message(self, message_id, channel_id):
