@@ -50,7 +50,7 @@ class ReactionManager(commands.Cog):
         embed.description = '**• Para abrir uma denúncia você precisa:**\n > Do ID do infrator (Como copiar ID em <#936691125526351922>);\n> De um motivo plausível;\n> De provas e/ou testemunhas'
         embed.set_footer(text='Ao clicar em "🔒" e fechar o ticket, a staff NÃO poderá mais o ver.')
 
-        msg = await channel.send(content="{payload.member.mention} <@&745026039935139950>", embed=embed)
+        msg = await channel.send(content=f"{payload.member.mention} <@&745026039935139950>", embed=embed)
         await msg.add_reaction(config.CLOSE_REACTION)
 
     def is_first_message(self, message_id, channel_id):
